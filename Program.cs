@@ -56,4 +56,17 @@ app.MapPut("/api/tareas/{id}", async ([FromServices] TareasContext dbContext, [F
     return Results.NotFound();
 });
 
+app.MapDelete("/api/tareas/{id}", async ([FromServices] TareasContext dbContext, [FromRoute] Guid id) =>
+{
+    var TareaActual = dbContext.Tareas.Find(id);
+    
+    if(TareaActual != null)
+    {
+        dbContext.Tareas.Remove(TareaActual);
+        await dbContext.SaveChangesAsync();
+        return Results.Ok();
+    }
+    return Results.NotFound();
+});
+
 app.Run();
